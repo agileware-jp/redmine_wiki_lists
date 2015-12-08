@@ -160,6 +160,23 @@ module WikiListsRefIssue
         else
           disp = context_menu(issues_context_menu_path)
           disp << render(:partial => 'issues/list', :locals => {:issues => @issues, :query => @query});
+
+          # Find groups of version and add note of effective_date & description
+          disp.gsub!( /<tr\s+class="group open">.*?<\/tr>/m ) { |version_tr_block|
+            if version_tr_block =~ %r|^(.*href="/versions/)(\d+)(".*</span>)(.*)$|m
+              head = $1
+              version_id = $2
+              middle = $3
+              tail = $4
+              version = @project.versions.find_by_id(version_id.to_i)
+              new_block = head + version_id + middle
+              new_block << "&nbsp;" + version.effective_date.to_s
+              new_block << "&nbsp;" + version.description + tail
+              new_block # replace
+            else
+              version_tr_block # do not replace
+            end
+          }
         end
 
         return disp.html_safe
