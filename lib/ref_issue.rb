@@ -163,7 +163,7 @@ module WikiListsRefIssue
 
           # Find groups of version and add note of effective_date & description
           disp.gsub!( /<tr\s+class="group open">.*?<\/tr>/m ) { |version_tr_block|
-            if version_tr_block =~ %r|^(.*href="/versions/)(\d+)(".*</span>)(.*)$|m
+            if version_tr_block =~ %r|^(.*href=".*/versions/)(\d+)(".*</span>)(.*)$|m
               head = $1
               version_id = $2
               middle = $3
