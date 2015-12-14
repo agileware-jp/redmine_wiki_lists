@@ -168,11 +168,16 @@ module WikiListsRefIssue
               version_id = $2
               middle = $3
               tail = $4
-              version = @project.versions.find_by_id(version_id.to_i)
-              new_block = head + version_id + middle
-              new_block << "&nbsp;" + version.effective_date.to_s
-              new_block << "&nbsp;" + version.description + tail
-              new_block # replace
+              version = Version.visible.find_by_id(version_id.to_i)
+              if version
+                new_block = head + version_id + middle
+                new_block << "&nbsp;" + version.effective_date.to_s if version.effective_date
+                new_block << "&nbsp;" + version.description if version.description
+                new_block << tail
+                new_block # replace
+              else
+                version_tr_block # do not replace
+              end
             else
               version_tr_block # do not replace
             end
