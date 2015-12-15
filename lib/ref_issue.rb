@@ -169,10 +169,10 @@ module WikiListsRefIssue
               middle = $3
               tail = $4
               version = Version.visible.find_by_id(version_id.to_i)
-              if version
+              if version.present?
                 new_block = head + version_id + middle
-                new_block << "&nbsp;" + version.effective_date.to_s if version.effective_date
-                new_block << "&nbsp;" + version.description if version.description
+                new_block << "&nbsp;" + version.effective_date.to_s if version.effective_date.present?
+                new_block << "&nbsp;" + version.description if version.description.present?
                 new_block << tail
                 new_block # replace
               else
